@@ -155,7 +155,6 @@ extension CountryPickerViewController {
                 }
             }
         }
-        cell.imageView?.image = country.flag
         
         cell.flgSize = dataSource.cellImageViewSize
         cell.imageView?.clipsToBounds = true

@@ -11,7 +11,7 @@ import UIKit
 public class CountryPickerViewController: UITableViewController {
 
     public var searchController: UISearchController?
-    fileprivate static let flagcacheLoaderQueue = DispatchQueue(label: "countrypicker.imageloader.queue")
+    fileprivate static let flagcacheLoaderQueue = DispatchQueue(label: "countrypicker.imageloader.queue", qos: .background)
     fileprivate var flagImagesCache = [String: UIImage]()
     fileprivate var searchResults = [Country]()
     fileprivate var isSearchMode = false

@@ -143,6 +143,7 @@ extension CountryPickerViewController {
             cell.imageView?.image = image
         }
         else {
+            cell.imageView?.image = nil
             let countryCode = country.code
             CountryPickerViewController.flagcacheLoaderQueue.async {
                 let flagImage = country.flag

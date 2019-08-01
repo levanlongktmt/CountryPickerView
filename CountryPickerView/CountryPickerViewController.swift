@@ -11,6 +11,8 @@ import UIKit
 public class CountryPickerViewController: UITableViewController {
 
     public var searchController: UISearchController?
+    fileprivate static let flagcacheLoaderQueue = DispatchQueue(label: "countrypicker.imageloader.queue")
+    fileprivate var flagImagesCache = [String: UIImage]()
     fileprivate var searchResults = [Country]()
     fileprivate var isSearchMode = false
     fileprivate var sectionsTitles = [String]()
@@ -135,6 +137,23 @@ extension CountryPickerViewController {
         }
         if dataSource.showPhoneCodeInList {
             name = "\(name) (\(country.phoneCode))"
+        }
+        cell.countryCode = country.code
+        if let image = flagImagesCache[country.code] {
+            cell.imageView?.image = image
+        }
+        else {
+            let countryCode = country.code
+            CountryPickerViewController.flagcacheLoaderQueue.async {
+                let flagImage = country.flag
+                DispatchQueue.main.async { [ weak self ] in
+                    guard let _self = self else { return }
+                    _self.flagImagesCache[countryCode] = flagImage
+                    if cell.countryCode == countryCode {
+                        cell.imageView?.image = flagImage
+                    }
+                }
+            }
         }
         cell.imageView?.image = country.flag
         
@@ -264,6 +283,8 @@ extension CountryPickerViewController: UISearchControllerDelegate {
 
 // MARK:- CountryTableViewCell.
 class CountryTableViewCell: UITableViewCell {
+    
+    var countryCode = ""
     
     var flgSize: CGSize = .zero
     
